@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Bicycle Calculators</title>
+    <link href="http://raichev.net/theme/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/theme/css/pygment.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/" type="application/atom+xml" rel="alternate" title="Alex Raichev ATOM Feed" />
+<!-- Using MathJax, with the delimiters $ -->
+<!-- Conflict with pygments for the .mo and .mi -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+    styles: {
+    ".MathJax .mo, .MathJax .mi": {color: "black ! important"}}
+    },
+    // tex2jax: {inlineMath: [['%','$'], ['\\(','\\)']],processEscapes: true}
+    tex2jax: {inlineMath: [['\\(','\\)']],processEscapes: true}
+    });
+    MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax["HTML-CSS"].FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+    MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>    <meta charset="utf-8">
+    
+</head>
+
+<body>
+<div id="container">    
+<div id="header">
+
+<script src="http://raichev.netjs/d3.v3.min.js"></script>
+<script src="http://raichev.netjs/graph.js"></script> 
+
+<h1>Alex Raichev</h1>
+</div><!-- end #header -->
+
+<div id="topMenu">
+<ul>
+        <li><a href="/index.html" 
+>Welcome</a></li>
+<li>/<li>        <li><a href="/pages/research-and-development.html" 
+>R&amp;D</a></li>
+<li>/<li>        <li><a href="/files/resume.pdf" 
+>Résumé</a></li>
+<li>/<li>        <li><a href="/blog.html" 
+>Blog</a></li>
+<li>/<li>        <li><a href="/archives.html" 
+>Blogindex</a></li>
+</ul>
+</div><!-- end #topMenu -->
+
+<div id="mainContent">  	
+
+ 
+
+<!-- <img src="/static/images/welcome.png" class="photo">
+ -->
+<div class='blogItem'>
+<h1>Trail Calculator</h1>
+
+<form id='trail' action="" method="post">
+<table>    
+<tr><td class='error' colspan=3></td></tr>
+<tr><td>front wheel radius (mm):</td>
+	<td><input type="text" name="wheel_radius" value="350" id="id_wheel_radius" /></td>
+	<td>(center to tire surface)</td>
+</tr>
+    
+<tr><td class='error' colspan=3></td></tr>
+<tr><td>head tube angle (degrees):</td>
+	<td><input type="text" name="head_tube_angle" value='72.5' id="id_head_tube_angle" /></td>
+	<td></td></tr>
+    
+<tr><td class='error' colspan=3></td></tr>
+<tr><td>fork rake/offset (mm):</td>
+	<td><input type="text" name="fork_rake" value='65' id="id_fork_rake" /></td>
+    <td></td></tr>
+
+</table>
+<br />
+<input type="submit" value="Calculate!" />
+<hr>
+<table id='output'>
+    <tr><td>trail</td><td>mechanical trail</td><td>wheel flop</td><tr>
+</table>
+</div>
+</form>
+
+
+<h2>About Trail</h2>
+<p>Trail, mechanical trail, and wheel flop are distance measurements related to a bike's front end geometry (wheel included) and greatly affect the bike's handling.
+Exactly how they do so is still unknown, though scientific testing is afoot. That said, French frame builder wisdom suggests that low trail (<= 45 mm) offers good handling when carrying a front load.
+You can find low trail geometry on randonneur and porteur style bicycles.</p>
+
+<h2>References</h2>
+<ul>
+	<li><a href='http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry'>http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry</a>. For background on trail and formulas. 
+</ul>
+</div>
+<script language='JavaScript' src='/static/js/trail_calculator.js'></script>
+  
+</div><!-- end #mainContent -->
+
+<div class="clearfloat"></div>
+
+<div id="footer">
+<p>Site powered by <a href="http://getpelican.com">Pelican</a>
+</div><!-- end #footer -->
+
+</div><!-- end #container -->
+    <script type="text/javascript">
+        var disqus_shortname = 'homesweetelectronichome';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+</body>
+</html>

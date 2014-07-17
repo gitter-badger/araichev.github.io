@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Alex Raichev - Blog - Filing USA Tax Returns from NZ</title>
+    <link href="http://raichev.net/theme/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/theme/css/pygment.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/" type="application/atom+xml" rel="alternate" title="Alex Raichev ATOM Feed" />
+<!-- Using MathJax, with the delimiters $ -->
+<!-- Conflict with pygments for the .mo and .mi -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+    styles: {
+    ".MathJax .mo, .MathJax .mi": {color: "black ! important"}}
+    },
+    // tex2jax: {inlineMath: [['%','$'], ['\\(','\\)']],processEscapes: true}
+    tex2jax: {inlineMath: [['\\(','\\)']],processEscapes: true}
+    });
+    MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax["HTML-CSS"].FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+    MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>    <meta charset="utf-8">
+    
+</head>
+
+<body>
+<div id="container">    
+<div id="header">
+
+<script src="http://raichev.netjs/d3.v3.min.js"></script>
+<script src="http://raichev.netjs/graph.js"></script> 
+
+<h1>Alex Raichev</h1>
+</div><!-- end #header -->
+
+<div id="topMenu">
+<ul>
+        <li><a href="/index.html" 
+>Welcome</a></li>
+<li>/<li>        <li><a href="/pages/research-and-development.html" 
+>R&amp;D</a></li>
+<li>/<li>        <li><a href="/files/resume.pdf" 
+>Résumé</a></li>
+<li>/<li>        <li><a href="/blog.html" 
+ 
+                class="active"
+>Blog</a></li>
+<li>/<li>        <li><a href="/archives.html" 
+>Blogindex</a></li>
+</ul>
+</div><!-- end #topMenu -->
+
+<div id="mainContent">  	
+
+ 
+
+<div class="blogItem">
+<h1>Filing USA Tax Returns from NZ</h1>
+<div class="date">2012-04-23</div>
+<p>Last updated June 2012.</p>
+<p>As i understand it, all USA citizens are required under USA law to report their worldwide income annually on a USA tax return, if they owe USA taxes.
+See the <a class="reference external" href="http://newzealand.usembassy.gov/irs.html">USA Embassy website</a> for more details.
+If i'm wrong on this, then please let me know, because it'll save me some time :-)</p>
+<p>Here's how i, a non-accountant, prepare my tax return.
+The procedure has worked for me for the past 4 years with no complaints from the USA Internal Revenue Service.
+If your finances aren't that complicated, it might work for you too.
+No promises, though.</p>
+<div class="section" id="april">
+<h2>15 April</h2>
+<p>Contact the NZ Internal Revenue Department (<a class="reference external" href="http://www.ird.govt.nz/">http://www.ird.govt.nz/</a>) and ask them to mail you a Summary of Earnings for the past fiscal year.
+The NZ fiscal tax year is 1 April--31 March.
+Summary of Earnings letters usually arrive in July.</p>
+</div>
+<div class="section" id="id1">
+<h2>16 April</h2>
+<p>Go to the <a class="reference external" href="http://www.irs.gov">IRS website</a> and see if you need to complete an FBAR form to report your foreign bank accounts.
+You probably do if you have had a total of USD 10000 in your foreign bank accounts at any point in the previous calendar year.
+The FBAR is a new form (since 2012?) that carries a hefty fine for incompletion.
+If you need to fill out an FBAR, then do it and mail it in.
+In 2012 it was due separate from one's tax return on 30 June.</p>
+</div>
+<div class="section" id="july">
+<h2>15 July</h2>
+<p>Once you receive your Summary of Earnings from NZ IRD, download the the following USA tax forms from the <a class="reference external" href="http://www.irs.gov">IRS website</a>.</p>
+<ul class="simple">
+<li>f1040: U.S. Individual Income Tax Return</li>
+<li>f1040sa: Schedule A Itemized Deductions</li>
+<li>f1116: Foreign Tax Credit</li>
+<li>f6251: Alternative Minimum Tax—Individuals</li>
+<li>f4868: Application for Automatic Extension of Time To File U.S. Individual Income Tax Return</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>16 July</h2>
+<p>Fill out the forms in this order, though some switching between forms is unavoidable: f1040sa, f1116, f1040, f6251, f4868.</p>
+<ul class="simple">
+<li>For f1040sa, deduct nothing so that your itemized deductions total $0.
+This odd step allows you to maximize your foreign tax credit in f1116, assuming that you did not earn any money in the USA.
+If you did earn money in the USA, then depending on how much, you might benefit from <em>not</em> filling out f104sa and taking the standard deduction on f1040 instead.
+Run the numbers yourself to check which option saves you more money.</li>
+<li>For f1116, get the NZ dollar-US dollar tax exchange rate for your tax year from <a class="reference external" href="http://newzealand.usembassy.gov/irs.html">http://newzealand.usembassy.gov/irs.html</a>.</li>
+<li>For f1040, enter 1 April--31 March as your tax year.</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>17 July</h2>
+<p>Print, double-check, and sign the forms.
+Mail them to the IRS.
+Celebrate.</p>
+</div>
+	
+
+<div class="blogMeta">        
+Author: Alex Raichev<br />
+Date: 2012-04-23<br />
+    Tags:
+        <span><a href="http://raichev.net/tag/tax.html">
+        tax</a></span>
+<br />
+<a href="http://raichev.net/filing-usa-tax-returns-from-nz.html#disqus_thread">Comments</a> -
+<a href="http://raichev.net/filing-usa-tax-returns-from-nz.html">Permalink</a>
+</div>
+</div><!-- end #blogItem -->        
+
+    <div class="blogItem">    
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'homesweetelectronichome';
+        (function() {
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>
+        Please enable JavaScript to view the
+        <a href="http://disqus.com/?ref_noscript=homesweetelectronichome">
+            comments powered by Disqus.
+        </a>
+    </noscript>
+    <a href="http://disqus.com" class="dsq-brlink">
+        blog comments powered by <span class="logo-disqus">Disqus</span>
+    </a>
+    </div>
+<!-- end #content -->
+  
+</div><!-- end #mainContent -->
+
+<div class="clearfloat"></div>
+
+<div id="footer">
+<p>Site powered by <a href="http://getpelican.com">Pelican</a>
+</div><!-- end #footer -->
+
+</div><!-- end #container -->
+    <script type="text/javascript">
+        var disqus_shortname = 'homesweetelectronichome';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+</body>
+</html>

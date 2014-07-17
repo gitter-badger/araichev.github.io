@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Alex Raichev - Blog - Store Credit</title>
+    <link href="http://raichev.net/theme/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/theme/css/pygment.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/" type="application/atom+xml" rel="alternate" title="Alex Raichev ATOM Feed" />
+<!-- Using MathJax, with the delimiters $ -->
+<!-- Conflict with pygments for the .mo and .mi -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+    styles: {
+    ".MathJax .mo, .MathJax .mi": {color: "black ! important"}}
+    },
+    // tex2jax: {inlineMath: [['%','$'], ['\\(','\\)']],processEscapes: true}
+    tex2jax: {inlineMath: [['\\(','\\)']],processEscapes: true}
+    });
+    MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax["HTML-CSS"].FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+    MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>    <meta charset="utf-8">
+    
+</head>
+
+<body>
+<div id="container">    
+<div id="header">
+
+<script src="http://raichev.netjs/d3.v3.min.js"></script>
+<script src="http://raichev.netjs/graph.js"></script> 
+
+<h1>Alex Raichev</h1>
+</div><!-- end #header -->
+
+<div id="topMenu">
+<ul>
+        <li><a href="/index.html" 
+>Welcome</a></li>
+<li>/<li>        <li><a href="/pages/research-and-development.html" 
+>R&amp;D</a></li>
+<li>/<li>        <li><a href="/files/resume.pdf" 
+>Résumé</a></li>
+<li>/<li>        <li><a href="/blog.html" 
+ 
+                class="active"
+>Blog</a></li>
+<li>/<li>        <li><a href="/archives.html" 
+>Blogindex</a></li>
+</ul>
+</div><!-- end #topMenu -->
+
+<div id="mainContent">  	
+
+ 
+
+<div class="blogItem">
+<h1>Store Credit</h1>
+<div class="date">2013-04-11</div>
+<p>Here's the store credit problem from <a class="reference external" href="http://code.google.com/codejam/contest/dashboard?c=351101#s=p0">Google Code Jam Qualification Round Africa 2010</a>, which i discovered via <a class="reference external" href="http://programmingpraxis.com">Programming Praxis</a>:</p>
+<p>You receive a credit C at a local store and would like to buy two items. You first walk through the store and create a list L of all available items. From this list you would like to buy two items that add up to the entire value of the credit. The solution you provide will consist of the two integers indicating the positions of the items in your list (smaller number first). For instance, with C=100 and L={5,75,25} the solution is 2,3; with C=200 and L={150,24,79,50,88,345,3} the solution is 1,4; and with C=8 and L={2,1,9,4,4,56,90,3} the solution is 4,5.</p>
+<div class="section" id="algorithm-1">
+<h2>Algorithm 1</h2>
+<p>Brute force. Test all pairs in the list. O(n^2) time and O(n) space.</p>
+</div>
+<div class="section" id="algorithm-2">
+<h2>Algorithm 2</h2>
+<p>Sort the list and then iterate over the list, at each step looking for the complementary price of the current price via binary search.
+O(n lg n) time and O(n) space.</p>
+</div>
+<div class="section" id="algorithm-3">
+<h2>Algorithm 3</h2>
+<p>Store the prices and indices in a dictionary and then iterate over the dictionary, at each step looking for the complementary price. Since dictionary look-up is constant time on average, this is an O(n) time (in the average case) and O(n) space algorithm.  Hooray!</p>
+<p>Here's a Python 2.7 implementation:</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">find_pair</span><span class="p">(</span><span class="n">credit</span><span class="p">,</span> <span class="n">prices</span><span class="p">):</span>
+    <span class="c"># Make a dictionary with items of the form</span>
+    <span class="c"># (price, set of indices of items with that price).</span>
+    <span class="c"># Note that the price list could contain duplicate prices.</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prices</span><span class="p">):</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># + 1 to index from 1 instead of 0.</span>
+    <span class="k">for</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">price</span> <span class="o">&lt;=</span> <span class="n">credit</span><span class="p">:</span>
+            <span class="c"># Remove price index from d.</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">price</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="c"># Check whether there&#39;s a complementary price in d.</span>
+            <span class="k">if</span> <span class="n">credit</span> <span class="o">-</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                <span class="c"># This works even if price == credit - price.</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">credit</span> <span class="o">-</span> <span class="n">price</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="c"># Reinsert price index into d.</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">price</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">&quot;Sorry, no pair of item costs sum to </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">credit</span>
+</pre></div>
+</div>
+	
+
+<div class="blogMeta">        
+Author: Alex Raichev<br />
+Date: 2013-04-11<br />
+    Tags:
+        <span><a href="http://raichev.net/tag/algorithm.html">
+        algorithm</a>, </span>
+        <span><a href="http://raichev.net/tag/puzzle.html">
+        puzzle</a></span>
+<br />
+<a href="http://raichev.net/store-credit.html#disqus_thread">Comments</a> -
+<a href="http://raichev.net/store-credit.html">Permalink</a>
+</div>
+</div><!-- end #blogItem -->        
+
+    <div class="blogItem">    
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'homesweetelectronichome';
+        (function() {
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>
+        Please enable JavaScript to view the
+        <a href="http://disqus.com/?ref_noscript=homesweetelectronichome">
+            comments powered by Disqus.
+        </a>
+    </noscript>
+    <a href="http://disqus.com" class="dsq-brlink">
+        blog comments powered by <span class="logo-disqus">Disqus</span>
+    </a>
+    </div>
+<!-- end #content -->
+  
+</div><!-- end #mainContent -->
+
+<div class="clearfloat"></div>
+
+<div id="footer">
+<p>Site powered by <a href="http://getpelican.com">Pelican</a>
+</div><!-- end #footer -->
+
+</div><!-- end #container -->
+    <script type="text/javascript">
+        var disqus_shortname = 'homesweetelectronichome';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+</body>
+</html>

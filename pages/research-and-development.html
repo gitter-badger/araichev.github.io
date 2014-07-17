@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Alex Raichev - Research and Development</title>
+    <link href="http://raichev.net/theme/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/theme/css/pygment.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="http://raichev.net/" type="application/atom+xml" rel="alternate" title="Alex Raichev ATOM Feed" />
+<!-- Using MathJax, with the delimiters $ -->
+<!-- Conflict with pygments for the .mo and .mi -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+    styles: {
+    ".MathJax .mo, .MathJax .mi": {color: "black ! important"}}
+    },
+    // tex2jax: {inlineMath: [['%','$'], ['\\(','\\)']],processEscapes: true}
+    tex2jax: {inlineMath: [['\\(','\\)']],processEscapes: true}
+    });
+    MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax["HTML-CSS"].FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+    MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
+    var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;
+    VARIANT["normal"].fonts.unshift("MathJax_SansSerif");
+    VARIANT["bold"].fonts.unshift("MathJax_SansSerif-bold");
+    VARIANT["italic"].fonts.unshift("MathJax_SansSerif-italic");
+    VARIANT["-tex-mathit"].fonts.unshift("MathJax_SansSerif-italic");
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>    <meta charset="utf-8">
+    
+</head>
+
+<body>
+<div id="container">    
+<div id="header">
+
+<script src="http://raichev.netjs/d3.v3.min.js"></script>
+<script src="http://raichev.netjs/graph.js"></script> 
+
+<h1>Alex Raichev</h1>
+</div><!-- end #header -->
+
+<div id="topMenu">
+<ul>
+        <li><a href="/index.html" 
+>Welcome</a></li>
+<li>/<li>        <li><a href="/pages/research-and-development.html" 
+ 
+                class="active"
+>R&amp;D</a></li>
+<li>/<li>        <li><a href="/files/resume.pdf" 
+>Résumé</a></li>
+<li>/<li>        <li><a href="/blog.html" 
+>Blog</a></li>
+<li>/<li>        <li><a href="/archives.html" 
+>Blogindex</a></li>
+</ul>
+</div><!-- end #topMenu -->
+
+<div id="mainContent">  	
+
+        
+
+<div class="blogItem">
+<h1>Research and Development</h1>
+<p>I love math and algorithms and work as a consultant on various technical projects. I'm also as an honorary research fellow in the University of Auckland Computer Science Department.</p>
+<div class="section" id="some-creations">
+<h2>Some Creations</h2>
+<ul class="simple">
+<li><a class="reference external" href="http://markov-poems.net">Markov: A Game of Poems</a></li>
+<li><a class="reference external" href="http://affordability.org.nz">Affordability in New Zealand</a>.
+A web application to visualize affordability in various regions of New Zealand.</li>
+<li><a class="reference external" href="http://gtfs-explorer.net">GTFS Explorer</a>.
+A web application to analyze and visualize public transport data in the form of General Transit Feed Specification (GTFS) feeds. A project for MRCagney.</li>
+<li><a class="reference external" href="https://github.com/araichev/graph_dynamics">graph_dynamics</a>.
+Python/Sage code for running graph dynamics experiments.
+A social networks project for Mark C. Wilson and Patrick Girard at the University of Auckland.</li>
+<li><a class="reference external" href="/files/contours.pdf">Contours</a>. A mathematical coloring book.</li>
+<li><a class="reference external" href="http://code.scenzgrid.org/index.php/p/rhealpixdggs-py/source/tree/master/">rHEALPixDGGS</a>.
+A Python package implementing a new discrete global grid system (DGGS) based on NASA's HEALPix projection.
+Designed to underlie SCENZ-Grid, an open-source geographic analysis system for worldwide scientific collaboration.
+A project for Landcare Research.
+See the rHEALPix article below for more background.</li>
+<li><a class="reference external" href="https://github.com/araichev/amgf">amgf</a>.
+Python/Sage code to compute asymptotics of coefficients of multivariate generating functions.
+To be incorporated into the Sage codebase; see <a class="reference external" href="http://trac.sagemath.org/sage_trac/ticket/10519">Sage ticket #10519</a>.</li>
+</ul>
+</div>
+<div class="section" id="research-publications">
+<h2>Research Publications</h2>
+<p>Most of the articles below are the journal versions but typeset without the journal house styles and with minor typos corrected.</p>
+<ul class="simple">
+<li><a class="reference external" href="/files/rhealpix_dggs_preprint.pdf">The rHEALPix discrete global grid system</a>,
+Robert Gibb, Alexander Raichev, and Michael Speth, in preparation.</li>
+<li><a class="reference external" href="/files/amgf_issac.pdf">New software for computing asymptotics of multivariate generating functions</a>,
+Alexander Raichev, ACM Communications in Computer Algebra, Volume 45 Issue 3/4, September/December 2011, pages 183–185.</li>
+<li><a class="reference external" href="http://www.math.rochester.edu/ojac/vol6/Raichev_2011.pdf">Asymptotics of coefficients of multivariate generating functions: improvements for multiple points</a>.
+Alexander Raichev and Mark C. Wilson, Online Journal of Analytic Combinatorics, Issue 6, 2011.
+As printed in the Online Journal of Analytic Combinatorics and elsewhere online, Theorem 3.4 of this paper contains a typo.  Its hypotheses should be strengthened to require that <span class="formula"><i>α</i></span>
+ lies in the <em>interior</em> of the critical cone of <span class="formula"><i>p</i></span>
+.
+Indeed, 1) in our proof of Theorem 3.4 we actually used the interior of the cone when considering the integrals <span class="formula"><i>I</i><sub><i>j</i>, <i>r</i></sub></span>
+; 2) for <span class="formula"><i>α</i></span>
+ in the critical cone of <span class="formula"><i>p</i></span>
+ and on its boundary, asymptotics can differ from our formula in Theorem 3.4, e.g. the leading term coefficient can be half of what our formula states, as shown in [PeWi2010] Lemma 4.7,
+where [PeWi2010] is the article &quot;Asymptotic expansions of oscillatory integrals with complex phase&quot; in Algorithmic Probability and Combinatorics, AMS Contemporary Mathematics series, vol. 520, pages 221--240, 2010.</li>
+<li><a class="reference external" href="http://arxiv.org/pdf/0803.2914">Asymptotics of coefficients of multivariate generating functions: improvements for smooth points</a>.
+Alexander Raichev and Mark C. Wilson, Electronic Journal of Combinatorics, Vol. 15 (2008), R89.</li>
+<li><a class="reference external" href="http://arxiv.org/pdf/math/0702595">A new method for computing asymptotics of diagonal coefficients of multivariate generating functions</a>.
+Alexander Raichev and Mark C. Wilson, Discrete Mathematics &amp; Theoretical Computer Science Proceedings, Conference on Analysis of Algorithms 2007.</li>
+<li><a class="reference external" href="/files/thesis_a4.pdf">Relative randomness via rK-reducibility</a>,
+Alexander Raichev, Ph.D. dissertation, University of Wisconsin–Madison, 2006.</li>
+<li><a class="reference external" href="/files/minimal_rk.pdf">A minimal rK-degree</a>.
+Alexander Raichev and Frank Stephan, Lecture Notes Series, Institute for Mathematical Sciences, National University of Singapore, Vol. 15 (2008), 261--269.</li>
+<li><a class="reference external" href="/files/model_completeness.pdf">Model completeness for trivial, uncountably categorical theories of Morley rank 1</a>.
+Alfred Dolich, Michael C. Laskowski, and Alexander Raichev, Archive for Mathematical Logic, Jul 2006, 1--15.</li>
+<li><a class="reference external" href="/files/real_closed_fields.pdf">Relative randomness and real closed fields</a>.
+Alexander Raichev, Journal of Symbolic Logic, 70 (2005), no. 1, 319--330.
+Were i to write this paper and the corresponding section in my thesis again, i would use the standard notion of a computable real function instead of introducing the new notion of a weakly computable real function, and then use computable locally Lipschitz functions.  The theorems all go through with only minor modifications.</li>
+<li><a class="reference external" href="/files/real_closed_fields_short_cca.pdf">Relative randomness and real closed fields (extended abstract)</a>.
+Alexander Raichev, Proceedings of the 6th Workshop on Computability and Complexity in Analysis (CCA 2004),  135--143, Electron. Notes Theor. Comput. Sci., 120, Elsevier, Amsterdam, 2005.</li>
+</ul>
+</div>
+
+
+</div>
+
+  
+</div><!-- end #mainContent -->
+
+<div class="clearfloat"></div>
+
+<div id="footer">
+<p>Site powered by <a href="http://getpelican.com">Pelican</a>
+</div><!-- end #footer -->
+
+</div><!-- end #container -->
+    <script type="text/javascript">
+        var disqus_shortname = 'homesweetelectronichome';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+</body>
+</html>
