@@ -137,6 +137,7 @@ form table td {
 }
 .blogItem h1:before {
     content: ">";
+    font-weight: normal;
     margin: -1em;
     padding-right: 1.4em;
     color: #ccc;
@@ -144,7 +145,7 @@ form table td {
 .blogItem h1 a,
 .blogItem h2 a {
     color: #222;
-    font-weight: bold;
+    font: inherit;
 }
 .blogItem h1 a:hover,
 .blogItem h2 a:hover {
