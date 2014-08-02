@@ -72,6 +72,154 @@
  
     
     <div class="blogItem">
+    <h1><a href="http://raichev.net/adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html">Adding Celery with RabbitMQ to a Django project on Webfaction</a></h1>
+    <div class="date">2014-08-02</div>
+    <p>I recently added Celery with RabbitMQ to one of my Django projects on Webfaction.
+Along the way, i read lots of documentation, ran into difficulties, and got advice from the helpful staff at Webfaction.
+What worked for me in the end are the instructions below.
+They might work for you too.
+If not, i recommend asking for help on the <a class="reference external" href="https://community.webfaction.com/">Webfaction Community board</a>.
+Don't ask me, because i'm just a beginner at this stuff :-)</p>
+<p>I'll assume that you've already added Celery with RabbitMQ to your Django project in your <em>development</em> environment (encapsulated within a virtual environment) and have that working as desired.
+If not, follow <a class="reference external" href="http://celery.readthedocs.org">the Celery docs</a>.
+By the way, the latest version of Celery, version 3.1.13, works with Django out of the box and no longer requires installing the additional <tt class="docutils literal"><span class="pre">django-celery</span></tt> Django app.</p>
+<p>Now, let's add Celery with RabbitMQ to your <em>production</em> environment (encapsulated within a virtual environment) on Webfaction.</p>
+<div class="section" id="preparation">
+<h2>Preparation</h2>
+<ul class="simple">
+<li>Ssh into your Webfaction server. All the command line instructions below take place in that session.</li>
+<li>Also log in to your Webfaction control panel on the web</li>
+<li>When following the instructions below, replace text of the form <tt class="docutils literal">&lt;stuff&gt;</tt> with text appropriate to your situation. For example, replace <tt class="docutils literal">&lt;username&gt;</tt> by your Webfaction username.</li>
+</ul>
+</div>
+<div class="section" id="install-and-configure-erlang">
+<h2>Install and configure Erlang</h2>
+<ol class="arabic simple">
+<li>From your Webfaction control panel, create a new application with App category: Custom, App type: Custom app (listening on port). Note the port number that gets assigned to your app.</li>
+<li>Go to <a class="reference external" href="http://www.erlang.org/download.html">Erlang's download webpage</a> and copy the link to the latest .tar.gz version of Erlang</li>
+<li>In your ssh session, download the latest version of Erlang (currently OTP 17.1): <tt class="docutils literal">wget &lt;the Erlang link you copied&gt;</tt></li>
+<li>Unzip it: <tt class="docutils literal">gunzip <span class="pre">-c</span> otp_src_17.1.tar.gz | tar xf -</tt></li>
+<li>Change to the directory created: <tt class="docutils literal">cd otp_src_17.1</tt></li>
+<li>Configure the build: <tt class="docutils literal">./configure <span class="pre">--prefix=/home/&lt;username&gt;/</span></tt></li>
+<li>Make it: <tt class="docutils literal">make</tt></li>
+<li>Install it: <tt class="docutils literal">make install</tt></li>
+</ol>
+</div>
+<div class="section" id="test-erlang">
+<h2>Test Erlang</h2>
+<ol class="arabic simple">
+<li>Run Erlang on the port assigned to your Erlang app (noted in the first step): <tt class="docutils literal">epmd <span class="pre">-port</span> &lt;port number&gt; <span class="pre">-daemon</span></tt></li>
+<li>Check that it is running by looking for an <tt class="docutils literal">epmd</tt> process: <tt class="docutils literal">ps <span class="pre">-u</span> &lt;username&gt; <span class="pre">-o</span> command,pid | grep 'epmd <span class="pre">-port'</span></tt></li>
+</ol>
+</div>
+<div class="section" id="install-and-configure-rabbitmq">
+<h2>Install and configure RabbitMQ</h2>
+<ol class="arabic">
+<li><p class="first">From your Webfaction control panel, create a new application with App category: Custom, App type: Custom app (listening on port). Note the port number that gets assigned to your app.</p>
+</li>
+<li><p class="first">Go to <a class="reference external" href="http://www.rabbitmq.com/download.html">RabbitMQ's download webpage</a> and copy the link to the latest binary .tar.gz version of RabbitMQ (currently 3.3.4)</p>
+</li>
+<li><p class="first">In your ssh session, download the latest binary version of RabbitMQ: <tt class="docutils literal">wget &lt;the RabbitMQ link you copied&gt;</tt></p>
+</li>
+<li><p class="first">Unzip it: <tt class="docutils literal">gunzip <span class="pre">-c</span> <span class="pre">rabbitmq-server-generic-unix-3.3.4.tar.gz</span> | tar xf -</tt></p>
+</li>
+<li><p class="first">Simlink RabbitMQ to the Erlang lib directory: <tt class="docutils literal">cd ~/lib/erlang/lib/; ln <span class="pre">-s</span> <span class="pre">../src/rabbitmq_server-3.3.4</span> <span class="pre">rabbitmq_server-3.3.4</span></tt></p>
+</li>
+<li><p class="first">Edit <tt class="docutils literal"><span class="pre">$HOME/rabbitmq_server-3.3.4/sbin/rabbitmq-defaults</span></tt>:</p>
+<blockquote>
+<div class="highlight"><pre>...
+<span class="c"># comment these lines:</span>
+<span class="c">#CONFIG_FILE=${SYS_PREFIX}/etc/rabbitmq/rabbitmq</span>
+<span class="c">#LOG_BASE=${SYS_PREFIX}/var/log/rabbitmq</span>
+<span class="c">#MNESIA_BASE=${SYS_PREFIX}/var/lib/rabbitmq/mnesia</span>
+<span class="c"># add these lines:</span>
+<span class="nv">CONFIG_FILE</span><span class="o">=</span>/home/&lt;username&gt;/rabbitmq_server-3.1.0/sbin/
+<span class="nv">LOG_BASE</span><span class="o">=</span>/home/&lt;username&gt;/logs/user/rabbitmq <span class="c"># create this directory!</span>
+<span class="nv">MNESIA_BASE</span><span class="o">=</span>/home/&lt;username&gt;/rabbitmq_server-3.1.0/sbin/
+...
+</pre></div>
+</blockquote>
+</li>
+<li><p class="first">Create the RabbitMQ log directory: <tt class="docutils literal">mkdir <span class="pre">/home/&lt;username&gt;/logs/user/rabbitmq</span></tt></p>
+</li>
+<li><p class="first">Edit <tt class="docutils literal"><span class="pre">$HOME/rabbitmq_server-3.3.4/sbin/rabbitmq-env</span></tt>:</p>
+<blockquote>
+<div class="highlight"><pre>...
+<span class="c"># add to the end</span>
+<span class="nb">export </span><span class="nv">ERL_EPMD_PORT</span><span class="o">=</span>&lt;Erlang-Custom-App-Port&gt;
+<span class="nb">export </span><span class="nv">RABBITMQ_NODE_PORT</span><span class="o">=</span>&lt;RabbitMQ-Custom-App-Port&gt;
+<span class="nb">export </span><span class="nv">ERL_INETRC</span><span class="o">=</span><span class="nv">$HOME</span>/.erl_inetrc
+</pre></div>
+</blockquote>
+</li>
+<li><p class="first">Create <tt class="docutils literal">$HOME/hosts</tt>, replacing <tt class="docutils literal">dweb125</tt> with your Webfaction hostname prefix:</p>
+<blockquote>
+<div class="highlight"><pre>127.0.0.1 developmenthost.developmentdomain developmenthost
+::1      developmenthost6.developmentdomain6 developmenthost6
+127.0.0.1 dweb125 dweb125.webfaction.com
+</pre></div>
+</blockquote>
+</li>
+<li><p class="first">Create <tt class="docutils literal"><span class="pre">$HOME/.erl_inetrc</span></tt>:</p>
+<blockquote>
+<div class="highlight"><pre><span class="o">{</span>hosts_file, <span class="s2">&quot;/home/&lt;username&gt;/hosts&quot;</span><span class="o">}</span>.
+<span class="o">{</span>lookup, <span class="o">[</span>file,native<span class="o">]}</span>.
+</pre></div>
+</blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="test-rabbitmq">
+<h2>Test RabbitMQ</h2>
+<ol class="arabic simple">
+<li>Make sure you have Erlang running.  Start RabbitMQ via <tt class="docutils literal"><span class="pre">./rabbitmq_server-3.3.4/sbin/rabbitmq-server</span> <span class="pre">-detached;</span> <span class="pre">./rabbitmq_server-3.3.4/sbin/rabbitmqctl</span> status</tt> and see if you get a bunch of JSON-like text that ends with <tt class="docutils literal"><span class="pre">...done.</span></tt></li>
+</ol>
+</div>
+<div class="section" id="install-and-configure-celery">
+<h2>Install and configure Celery</h2>
+<ol class="arabic">
+<li><p class="first">Within your ssh session, activate the virtual environment for your Django project and install Celery via <tt class="docutils literal">pip install celery</tt>.</p>
+</li>
+<li><p class="first">Assuming you've already configured Celery to work in your development environment, all that's left to do is add the following line to the production version of your Django settings file:</p>
+<blockquote>
+<div class="highlight"><pre><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s">&#39;amqp://guest:guest@localhost:&lt;your RabbitMQ port&gt;//&#39;</span>
+</pre></div>
+</blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="test-celery">
+<h2>Test Celery</h2>
+<ol class="arabic simple">
+<li>Within your ssh session and Django project directory, run <tt class="docutils literal">celery <span class="pre">-A</span> &lt;your Django project&gt; worker <span class="pre">-l</span> info</tt></li>
+</ol>
+<p>That's it.
+Fyew!
+You now have Erlang, RabbitMQ, and Celery installed and running on Webfaction.</p>
+</div>
+<div class="section" id="todo">
+<h2>Todo</h2>
+<p>I've heard that controlling Erlang + RabbitMQ + Celery with <a class="reference external" href="http://supervisord.org/">Supervisor</a> is a good idea, but i haven't looked into that yet.</p>
+</div>
+<div class="section" id="references">
+<h2>References</h2>
+<ul class="simple">
+<li><a class="reference external" href="http://www.markliu.me/2011/sep/29/django-celery-on-webfaction-using-rabbitmq/">2011 blog post by Mark Liu</a></li>
+<li><a class="reference external" href="https://www.zoe.vc/2013/celery-with-rabbitmq-3-1-0-on-webfaction/">2013 blog post by Alexander Herrmann</a></li>
+<li><a class="reference external" href="https://community.webfaction.com/questions/17223/django-celery-rabbitmq-errno-111-connection-refused?page=1&amp;focusedAnswerId=17239#17239">this Webfaction Community Question</a></li>
+</ul>
+</div>
+	
+
+    <div class="blogMeta">        
+    Author: Alex Raichev<br>
+    Date: 2014-08-02<br>
+    <a href="http://raichev.net/adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html#disqus_thread">Comments</a> -
+    <a href="http://raichev.net/adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html">Permalink</a>    
+    </div>
+    </div><!-- end #blogItem -->
+    
+    <div class="blogItem">
     <h1><a href="http://raichev.net/dinosaur-comic-2672.html">Dinosaur Comic 2672</a></h1>
     <div class="date">2014-08-01</div>
     <a class="reference external image-reference" href="http://www.qwantz.com/index.php?comic=2672"><img alt="" src="/files/dinosaur_comic.png" /></a>
@@ -512,91 +660,6 @@ Either you try or you don't. It is up to you.</p>
         Markov500</a><br />
     <a href="http://raichev.net/free-of-debts.html#disqus_thread">Comments</a> -
     <a href="http://raichev.net/free-of-debts.html">Permalink</a>    
-    </div>
-    </div><!-- end #blogItem -->
-    
-    <div class="blogItem">
-    <h1><a href="http://raichev.net/reminiscences.html">Reminiscences</a></h1>
-    <div class="date">2014-04-12</div>
-    <div class="line-block">
-<div class="line"><br /></div>
-<div class="line">$13.34 earned by day labor</div>
-<div class="line">$36.78 in all</div>
-<div class="line">Which subtracted from the same feeling that I can stand aloof from betimes their winter quarters who have lost their vitality,</div>
-<div class="line">And so frequently the most money demanded are never the worst vice betrayed</div>
-<div class="line">Improvidence</div>
-<div class="line"><br /></div>
-<div class="line">I sometimes dream of mine to ornament a line</div>
-<div class="line">I cannot exaggerate enough even to lay the foundation,</div>
-<div class="line">Of a march of crusaders in the shallower parts,</div>
-<div class="line">Floating up to feed, where else would they be?</div>
-<div class="line">Some absolute goodness somewhere?</div>
-<div class="line"><br /></div>
-<div class="line">With such reminiscences I repeopled the woods</div>
-<div class="line">And still from time to time</div>
-<div class="line">Here are such that you have done great deeds and sung divine songs,</div>
-<div class="line">Which shall still consist of only one or two of my pleasing works</div>
-<div class="line">I took up my clothes, and along and out of the water,</div>
-<div class="line">Full of glee and youth, as most suppose,</div>
-<div class="line">Drained,</div>
-<div class="line">Would not stand much about gracefulness,</div>
-<div class="line">And never mean to countenance an effort,</div>
-<div class="line">And never hesitated at a certain set of rules,</div>
-<div class="line">Called etiquette and politeness,</div>
-<div class="line">I made it worth the while</div>
-<div class="line"><br /></div>
-<div class="line">That economy of living is diminished in proportion to what we pay,</div>
-<div class="line">Though there are any such, as has been gradually converted into the Middlesex hive,</div>
-<div class="line">And that sometimes it was that man could not get on in the year take place only in youth,</div>
-<div class="line">With round greasy face and paws,</div>
-<div class="line">Wearing a thick new garment to take charge of a dollar,</div>
-<div class="line">And having put on mourning in midsummer,</div>
-<div class="line"><br /></div>
-<div class="line">When I am convinced that I discovered</div>
-<div class="line">That it should as surely as so many violent blows without being domesticated,</div>
-<div class="line">Come floating up to feed,</div>
-<div class="line">And the fact that the remedy <em>is</em> worse than the cure,</div>
-<div class="line">The blue angels in it,</div>
-<div class="line">As the railroad, six feet square by seven deep,</div>
-<div class="line">Black melancholy in thought and in November,</div>
-<div class="line">Usually in a grass hut,</div>
-<div class="line">Listening to the last wrinkle which study had made,</div>
-<div class="line">And growing five or six feet beneath the rattling teams and chaises</div>
-<div class="line">And tinkling sleighs that travel the ice, seen near at home,</div>
-<div class="line">I was plowing</div>
-<div class="line">They warned me twice</div>
-<div class="line"><br /></div>
-<div class="line">Once while I just let time wear on leaning against a low-land degeneracy,</div>
-<div class="line">Thinking how little this village does for its own conditions,</div>
-<div class="line">Changes, perhaps, from half an hour under a rotten stump,</div>
-<div class="line">My hoe played the <em>Ranz des Vaches</em> ,</div>
-<div class="line">A rich and various crop unreaped by man</div>
-<div class="line"><br /></div>
-<div class="line">Mine was as it is</div>
-<div class="line">Worse to have invented and established worship,</div>
-<div class="line">Then to let them see they slew or captured any monster,</div>
-<div class="line">Or finished any labor</div>
-<div class="line">They have only one fact,</div>
-<div class="line">Or the three I have for farm produce</div>
-<div class="line">Sold at $23.44</div>
-</div>
-<div class="section" id="credits">
-<h2>Credits</h2>
-<ul class="simple">
-<li><em>Walden</em> by Henry David Thoreau</li>
-<li><a class="reference external" href="https://github.com/araichev/markov_500">Markov 500</a></li>
-</ul>
-</div>
-	
-
-    <div class="blogMeta">        
-    Author: Alex Raichev<br>
-    Date: 2014-04-12<br>
-        Tags:
-        <a href="http://raichev.net/tag/poem.html">
-        poem</a><br />
-    <a href="http://raichev.net/reminiscences.html#disqus_thread">Comments</a> -
-    <a href="http://raichev.net/reminiscences.html">Permalink</a>    
     </div>
     </div><!-- end #blogItem -->
     <div class="pagination">

@@ -1,5 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Alex Raichev</title><link href="http://raichev.net/" rel="alternate"></link><link href="http://raichev.net/feeds/blog.atom.xml" rel="self"></link><id>http://raichev.net/</id><updated>2014-08-01T00:00:00+12:00</updated><entry><title>Dinosaur Comic 2672</title><link href="http://raichev.net/dinosaur-comic-2672.html" rel="alternate"></link><updated>2014-08-01T00:00:00+12:00</updated><author><name>Alex Raichev</name></author><id>tag:raichev.net,2014-08-01:dinosaur-comic-2672.html</id><summary type="html">&lt;a class="reference external image-reference" href="http://www.qwantz.com/index.php?comic=2672"&gt;&lt;img alt="" src="/files/dinosaur_comic.png" /&gt;&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Alex Raichev</title><link href="http://raichev.net/" rel="alternate"></link><link href="http://raichev.net/feeds/blog.atom.xml" rel="self"></link><id>http://raichev.net/</id><updated>2014-08-02T00:00:00+12:00</updated><entry><title>Adding Celery with RabbitMQ to a Django project on Webfaction</title><link href="http://raichev.net/adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html" rel="alternate"></link><updated>2014-08-02T00:00:00+12:00</updated><author><name>Alex Raichev</name></author><id>tag:raichev.net,2014-08-02:adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html</id><summary type="html">&lt;p&gt;I recently added Celery with RabbitMQ to one of my Django projects on Webfaction.
+Along the way, i read lots of documentation, ran into difficulties, and got advice from the helpful staff at Webfaction.
+What worked for me in the end are the instructions below.
+They might work for you too.
+If not, i recommend asking for help on the &lt;a class="reference external" href="https://community.webfaction.com/"&gt;Webfaction Community board&lt;/a&gt;.
+Don't ask me, because i'm just a beginner at this stuff :-)&lt;/p&gt;
+&lt;p&gt;I'll assume that you've already added Celery with RabbitMQ to your Django project in your &lt;em&gt;development&lt;/em&gt; environment (encapsulated within a virtual environment) and have that working as desired.
+If not, follow &lt;a class="reference external" href="http://celery.readthedocs.org"&gt;the Celery docs&lt;/a&gt;.
+By the way, the latest version of Celery, version 3.1.13, works with Django out of the box and no longer requires installing the additional &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-celery&lt;/span&gt;&lt;/tt&gt; Django app.&lt;/p&gt;
+&lt;p&gt;Now, let's add Celery with RabbitMQ to your &lt;em&gt;production&lt;/em&gt; environment (encapsulated within a virtual environment) on Webfaction.&lt;/p&gt;
+&lt;div class="section" id="preparation"&gt;
+&lt;h2&gt;Preparation&lt;/h2&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Ssh into your Webfaction server. All the command line instructions below take place in that session.&lt;/li&gt;
+&lt;li&gt;Also log in to your Webfaction control panel on the web&lt;/li&gt;
+&lt;li&gt;When following the instructions below, replace text of the form &lt;tt class="docutils literal"&gt;&amp;lt;stuff&amp;gt;&lt;/tt&gt; with text appropriate to your situation. For example, replace &lt;tt class="docutils literal"&gt;&amp;lt;username&amp;gt;&lt;/tt&gt; by your Webfaction username.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="section" id="install-and-configure-erlang"&gt;
+&lt;h2&gt;Install and configure Erlang&lt;/h2&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;From your Webfaction control panel, create a new application with App category: Custom, App type: Custom app (listening on port). Note the port number that gets assigned to your app.&lt;/li&gt;
+&lt;li&gt;Go to &lt;a class="reference external" href="http://www.erlang.org/download.html"&gt;Erlang's download webpage&lt;/a&gt; and copy the link to the latest .tar.gz version of Erlang&lt;/li&gt;
+&lt;li&gt;In your ssh session, download the latest version of Erlang (currently OTP 17.1): &lt;tt class="docutils literal"&gt;wget &amp;lt;the Erlang link you copied&amp;gt;&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Unzip it: &lt;tt class="docutils literal"&gt;gunzip &lt;span class="pre"&gt;-c&lt;/span&gt; otp_src_17.1.tar.gz | tar xf -&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Change to the directory created: &lt;tt class="docutils literal"&gt;cd otp_src_17.1&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Configure the build: &lt;tt class="docutils literal"&gt;./configure &lt;span class="pre"&gt;--prefix=/home/&amp;lt;username&amp;gt;/&lt;/span&gt;&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Make it: &lt;tt class="docutils literal"&gt;make&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Install it: &lt;tt class="docutils literal"&gt;make install&lt;/tt&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="test-erlang"&gt;
+&lt;h2&gt;Test Erlang&lt;/h2&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Run Erlang on the port assigned to your Erlang app (noted in the first step): &lt;tt class="docutils literal"&gt;epmd &lt;span class="pre"&gt;-port&lt;/span&gt; &amp;lt;port number&amp;gt; &lt;span class="pre"&gt;-daemon&lt;/span&gt;&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Check that it is running by looking for an &lt;tt class="docutils literal"&gt;epmd&lt;/tt&gt; process: &lt;tt class="docutils literal"&gt;ps &lt;span class="pre"&gt;-u&lt;/span&gt; &amp;lt;username&amp;gt; &lt;span class="pre"&gt;-o&lt;/span&gt; command,pid | grep 'epmd &lt;span class="pre"&gt;-port'&lt;/span&gt;&lt;/tt&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="install-and-configure-rabbitmq"&gt;
+&lt;h2&gt;Install and configure RabbitMQ&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;From your Webfaction control panel, create a new application with App category: Custom, App type: Custom app (listening on port). Note the port number that gets assigned to your app.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Go to &lt;a class="reference external" href="http://www.rabbitmq.com/download.html"&gt;RabbitMQ's download webpage&lt;/a&gt; and copy the link to the latest binary .tar.gz version of RabbitMQ (currently 3.3.4)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;In your ssh session, download the latest binary version of RabbitMQ: &lt;tt class="docutils literal"&gt;wget &amp;lt;the RabbitMQ link you copied&amp;gt;&lt;/tt&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Unzip it: &lt;tt class="docutils literal"&gt;gunzip &lt;span class="pre"&gt;-c&lt;/span&gt; &lt;span class="pre"&gt;rabbitmq-server-generic-unix-3.3.4.tar.gz&lt;/span&gt; | tar xf -&lt;/tt&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Simlink RabbitMQ to the Erlang lib directory: &lt;tt class="docutils literal"&gt;cd ~/lib/erlang/lib/; ln &lt;span class="pre"&gt;-s&lt;/span&gt; &lt;span class="pre"&gt;../src/rabbitmq_server-3.3.4&lt;/span&gt; &lt;span class="pre"&gt;rabbitmq_server-3.3.4&lt;/span&gt;&lt;/tt&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Edit &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;$HOME/rabbitmq_server-3.3.4/sbin/rabbitmq-defaults&lt;/span&gt;&lt;/tt&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;...
+&lt;span class="c"&gt;# comment these lines:&lt;/span&gt;
+&lt;span class="c"&gt;#CONFIG_FILE=${SYS_PREFIX}/etc/rabbitmq/rabbitmq&lt;/span&gt;
+&lt;span class="c"&gt;#LOG_BASE=${SYS_PREFIX}/var/log/rabbitmq&lt;/span&gt;
+&lt;span class="c"&gt;#MNESIA_BASE=${SYS_PREFIX}/var/lib/rabbitmq/mnesia&lt;/span&gt;
+&lt;span class="c"&gt;# add these lines:&lt;/span&gt;
+&lt;span class="nv"&gt;CONFIG_FILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/&amp;lt;username&amp;gt;/rabbitmq_server-3.1.0/sbin/
+&lt;span class="nv"&gt;LOG_BASE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/&amp;lt;username&amp;gt;/logs/user/rabbitmq &lt;span class="c"&gt;# create this directory!&lt;/span&gt;
+&lt;span class="nv"&gt;MNESIA_BASE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/home/&amp;lt;username&amp;gt;/rabbitmq_server-3.1.0/sbin/
+...
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Create the RabbitMQ log directory: &lt;tt class="docutils literal"&gt;mkdir &lt;span class="pre"&gt;/home/&amp;lt;username&amp;gt;/logs/user/rabbitmq&lt;/span&gt;&lt;/tt&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Edit &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;$HOME/rabbitmq_server-3.3.4/sbin/rabbitmq-env&lt;/span&gt;&lt;/tt&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;...
+&lt;span class="c"&gt;# add to the end&lt;/span&gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ERL_EPMD_PORT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;Erlang-Custom-App-Port&amp;gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;RABBITMQ_NODE_PORT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;RabbitMQ-Custom-App-Port&amp;gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ERL_INETRC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;/.erl_inetrc
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Create &lt;tt class="docutils literal"&gt;$HOME/hosts&lt;/tt&gt;, replacing &lt;tt class="docutils literal"&gt;dweb125&lt;/tt&gt; with your Webfaction hostname prefix:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;127.0.0.1 developmenthost.developmentdomain developmenthost
+::1      developmenthost6.developmentdomain6 developmenthost6
+127.0.0.1 dweb125 dweb125.webfaction.com
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Create &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;$HOME/.erl_inetrc&lt;/span&gt;&lt;/tt&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;{&lt;/span&gt;hosts_file, &lt;span class="s2"&gt;&amp;quot;/home/&amp;lt;username&amp;gt;/hosts&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;.
+&lt;span class="o"&gt;{&lt;/span&gt;lookup, &lt;span class="o"&gt;[&lt;/span&gt;file,native&lt;span class="o"&gt;]}&lt;/span&gt;.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="test-rabbitmq"&gt;
+&lt;h2&gt;Test RabbitMQ&lt;/h2&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Make sure you have Erlang running.  Start RabbitMQ via &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;./rabbitmq_server-3.3.4/sbin/rabbitmq-server&lt;/span&gt; &lt;span class="pre"&gt;-detached;&lt;/span&gt; &lt;span class="pre"&gt;./rabbitmq_server-3.3.4/sbin/rabbitmqctl&lt;/span&gt; status&lt;/tt&gt; and see if you get a bunch of JSON-like text that ends with &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;...done.&lt;/span&gt;&lt;/tt&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="install-and-configure-celery"&gt;
+&lt;h2&gt;Install and configure Celery&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Within your ssh session, activate the virtual environment for your Django project and install Celery via &lt;tt class="docutils literal"&gt;pip install celery&lt;/tt&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Assuming you've already configured Celery to work in your development environment, all that's left to do is add the following line to the production version of your Django settings file:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;BROKER_URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;amqp://guest:guest@localhost:&amp;lt;your RabbitMQ port&amp;gt;//&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="test-celery"&gt;
+&lt;h2&gt;Test Celery&lt;/h2&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Within your ssh session and Django project directory, run &lt;tt class="docutils literal"&gt;celery &lt;span class="pre"&gt;-A&lt;/span&gt; &amp;lt;your Django project&amp;gt; worker &lt;span class="pre"&gt;-l&lt;/span&gt; info&lt;/tt&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That's it.
+Fyew!
+You now have Erlang, RabbitMQ, and Celery installed and running on Webfaction.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="todo"&gt;
+&lt;h2&gt;Todo&lt;/h2&gt;
+&lt;p&gt;I've heard that controlling Erlang + RabbitMQ + Celery with &lt;a class="reference external" href="http://supervisord.org/"&gt;Supervisor&lt;/a&gt; is a good idea, but i haven't looked into that yet.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="references"&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://www.markliu.me/2011/sep/29/django-celery-on-webfaction-using-rabbitmq/"&gt;2011 blog post by Mark Liu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://www.zoe.vc/2013/celery-with-rabbitmq-3-1-0-on-webfaction/"&gt;2013 blog post by Alexander Herrmann&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://community.webfaction.com/questions/17223/django-celery-rabbitmq-errno-111-connection-refused?page=1&amp;amp;focusedAnswerId=17239#17239"&gt;this Webfaction Community Question&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</summary></entry><entry><title>Dinosaur Comic 2672</title><link href="http://raichev.net/dinosaur-comic-2672.html" rel="alternate"></link><updated>2014-08-01T00:00:00+12:00</updated><author><name>Alex Raichev</name></author><id>tag:raichev.net,2014-08-01:dinosaur-comic-2672.html</id><summary type="html">&lt;a class="reference external image-reference" href="http://www.qwantz.com/index.php?comic=2672"&gt;&lt;img alt="" src="/files/dinosaur_comic.png" /&gt;&lt;/a&gt;
 </summary><category term="comic"></category></entry><entry><title>Advice from Ran Prieur</title><link href="http://raichev.net/advice-from-ran-prieur.html" rel="alternate"></link><updated>2014-07-27T00:00:00+12:00</updated><author><name>Alex Raichev</name></author><id>tag:raichev.net,2014-07-27:advice-from-ran-prieur.html</id><summary type="html">&lt;p&gt;&amp;quot;For the record, here's what I practice and preach:
 1) Make money the easiest way available to you, short of crime.
 2) If you radically reduce your spending, you will not have to make as much money, and you might find that the sacrifices of low spending are more meaningful and empowering than the sacrifices of high earning.
