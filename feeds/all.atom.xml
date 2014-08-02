@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Alex Raichev</title><link href="http://raichev.net/" rel="alternate"></link><link href="http://raichev.net/feeds/all.atom.xml" rel="self"></link><id>http://raichev.net/</id><updated>2014-08-02T00:00:00+12:00</updated><entry><title>Adding Celery with RabbitMQ to a Django project on Webfaction</title><link href="http://raichev.net/adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html" rel="alternate"></link><updated>2014-08-02T00:00:00+12:00</updated><author><name>Alex Raichev</name></author><id>tag:raichev.net,2014-08-02:adding-celery-with-rabbitmq-to-a-django-project-on-webfaction.html</id><summary type="html">&lt;p&gt;I recently added Celery with RabbitMQ to one of my Django projects on Webfaction.
-Along the way, i read lots of documentation, ran into difficulties, and got advice from the helpful staff at Webfaction.
+Along the way, i read lots of documentation, encountered difficulties, and got advice from the helpful staff at Webfaction.
 What worked for me in the end are the instructions below.
-They might work for you too.
-If not, i recommend asking for help on the &lt;a class="reference external" href="https://community.webfaction.com/"&gt;Webfaction Community board&lt;/a&gt;.
-Don't ask me, because i'm just a beginner at this stuff :-)&lt;/p&gt;
+May they might work for you too and save you some pain!&lt;/p&gt;
 &lt;p&gt;I'll assume that you've already added Celery with RabbitMQ to your Django project in your &lt;em&gt;development&lt;/em&gt; environment (encapsulated within a virtual environment) and have that working as desired.
 If not, follow &lt;a class="reference external" href="http://celery.readthedocs.org"&gt;the Celery docs&lt;/a&gt;.
 By the way, the latest version of Celery, version 3.1.13, works with Django out of the box and no longer requires installing the additional &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;django-celery&lt;/span&gt;&lt;/tt&gt; Django app.&lt;/p&gt;
