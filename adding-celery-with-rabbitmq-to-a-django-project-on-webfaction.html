@@ -107,7 +107,7 @@ By the way, the latest version of Celery, version 3.1.13, works with Django out 
 <h2>Test Erlang</h2>
 <ol class="arabic simple">
 <li>Run Erlang on the port assigned to your Erlang app (noted in the first step): <tt class="docutils literal">epmd <span class="pre">-port</span> &lt;port number&gt; <span class="pre">-daemon</span></tt></li>
-<li>Check that it is running by looking for an <tt class="docutils literal">epmd</tt> process: <tt class="docutils literal">ps <span class="pre">-u</span> &lt;username&gt; <span class="pre">-o</span> command,pid | grep 'epmd <span class="pre">-port'</span></tt></li>
+<li>Check that it is running by looking for an <tt class="docutils literal">epmd</tt> process: <tt class="docutils literal">ps aux | grep epmd</tt></li>
 </ol>
 </div>
 <div class="section" id="install-and-configure-rabbitmq">
@@ -170,7 +170,7 @@ By the way, the latest version of Celery, version 3.1.13, works with Django out 
 <div class="section" id="test-rabbitmq">
 <h2>Test RabbitMQ</h2>
 <ol class="arabic simple">
-<li>Make sure you have Erlang running.  Start RabbitMQ via <tt class="docutils literal"><span class="pre">./rabbitmq_server-3.3.4/sbin/rabbitmq-server</span> <span class="pre">-detached;</span> <span class="pre">./rabbitmq_server-3.3.4/sbin/rabbitmqctl</span> status</tt> and see if you get a bunch of JSON-like text that ends with <tt class="docutils literal"><span class="pre">...done.</span></tt></li>
+<li>Make sure you have Erlang running.  Start RabbitMQ via <tt class="docutils literal"><span class="pre">./rabbitmq_server-3.3.4/sbin/rabbitmq-server</span> <span class="pre">-detached</span></tt>, then check on its status via <tt class="docutils literal"><span class="pre">./rabbitmq_server-3.3.4/sbin/rabbitmqctl</span> status</tt>, and look for a line with <tt class="docutils literal"><span class="pre">{amqp,&lt;your</span> RabbitMQ <span class="pre">port&gt;,&quot;::&quot;}</span></tt>.</li>
 </ol>
 </div>
 <div class="section" id="install-and-configure-celery">
@@ -197,7 +197,8 @@ You now have Erlang, RabbitMQ, and Celery installed and running on Webfaction.</
 </div>
 <div class="section" id="todo">
 <h2>Todo</h2>
-<p>I've heard that controlling Erlang + RabbitMQ + Celery with <a class="reference external" href="http://supervisord.org/">Supervisor</a> is a good idea, but i haven't looked into that yet.</p>
+<p>I've heard that daemonizing Erlang + RabbitMQ + Celery with <a class="reference external" href="http://supervisord.org/">Supervisor</a> is a good idea.
+Will look into that.</p>
 </div>
 <div class="section" id="references">
 <h2>References</h2>
