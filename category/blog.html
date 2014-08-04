@@ -107,7 +107,7 @@ By the way, the latest version of Celery, version 3.1.13, works with Django out 
 <div class="section" id="test-erlang">
 <h2>Test Erlang</h2>
 <ol class="arabic simple">
-<li>Run Erlang on the port assigned to your Erlang app (noted in the first step): <tt class="docutils literal">epmd <span class="pre">-port</span> &lt;port number&gt; <span class="pre">-daemon</span></tt></li>
+<li>Run Erlang on the port assigned to your Erlang app (noted in the first step): <tt class="docutils literal">epmd <span class="pre">-port</span> &lt;your Erlang port&gt; <span class="pre">-daemon</span></tt></li>
 <li>Check that it is running by looking for an <tt class="docutils literal">epmd</tt> process: <tt class="docutils literal">ps aux | grep epmd</tt></li>
 </ol>
 </div>
@@ -145,8 +145,8 @@ By the way, the latest version of Celery, version 3.1.13, works with Django out 
 <blockquote>
 <div class="highlight"><pre>...
 <span class="c"># add to the end</span>
-<span class="nb">export </span><span class="nv">ERL_EPMD_PORT</span><span class="o">=</span>&lt;Erlang-Custom-App-Port&gt;
-<span class="nb">export </span><span class="nv">RABBITMQ_NODE_PORT</span><span class="o">=</span>&lt;RabbitMQ-Custom-App-Port&gt;
+<span class="nb">export </span><span class="nv">ERL_EPMD_PORT</span><span class="o">=</span>&lt;your Erlang port&gt;
+<span class="nb">export </span><span class="nv">RABBITMQ_NODE_PORT</span><span class="o">=</span>&lt;your RabbitMQ port&gt;
 <span class="nb">export </span><span class="nv">ERL_INETRC</span><span class="o">=</span><span class="nv">$HOME</span>/.erl_inetrc
 </pre></div>
 </blockquote>
@@ -198,7 +198,7 @@ You now have Erlang, RabbitMQ, and Celery installed and running on Webfaction.</
 </div>
 <div class="section" id="todo">
 <h2>Todo</h2>
-<p>I've heard that daemonizing Erlang + RabbitMQ + Celery with <a class="reference external" href="http://supervisord.org/">Supervisor</a> is a good idea.
+<p>I've heard that controlling Erlang + RabbitMQ + Celery with <a class="reference external" href="http://supervisord.org/">Supervisor</a> is a good idea.
 Will look into that.</p>
 </div>
 <div class="section" id="references">

@@ -31,7 +31,7 @@ By the way, the latest version of Celery, version 3.1.13, works with Django out 
 &lt;div class="section" id="test-erlang"&gt;
 &lt;h2&gt;Test Erlang&lt;/h2&gt;
 &lt;ol class="arabic simple"&gt;
-&lt;li&gt;Run Erlang on the port assigned to your Erlang app (noted in the first step): &lt;tt class="docutils literal"&gt;epmd &lt;span class="pre"&gt;-port&lt;/span&gt; &amp;lt;port number&amp;gt; &lt;span class="pre"&gt;-daemon&lt;/span&gt;&lt;/tt&gt;&lt;/li&gt;
+&lt;li&gt;Run Erlang on the port assigned to your Erlang app (noted in the first step): &lt;tt class="docutils literal"&gt;epmd &lt;span class="pre"&gt;-port&lt;/span&gt; &amp;lt;your Erlang port&amp;gt; &lt;span class="pre"&gt;-daemon&lt;/span&gt;&lt;/tt&gt;&lt;/li&gt;
 &lt;li&gt;Check that it is running by looking for an &lt;tt class="docutils literal"&gt;epmd&lt;/tt&gt; process: &lt;tt class="docutils literal"&gt;ps aux | grep epmd&lt;/tt&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -69,8 +69,8 @@ By the way, the latest version of Celery, version 3.1.13, works with Django out 
 &lt;blockquote&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;...
 &lt;span class="c"&gt;# add to the end&lt;/span&gt;
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ERL_EPMD_PORT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;Erlang-Custom-App-Port&amp;gt;
-&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;RABBITMQ_NODE_PORT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;RabbitMQ-Custom-App-Port&amp;gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ERL_EPMD_PORT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;your Erlang port&amp;gt;
+&lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;RABBITMQ_NODE_PORT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;your RabbitMQ port&amp;gt;
 &lt;span class="nb"&gt;export &lt;/span&gt;&lt;span class="nv"&gt;ERL_INETRC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;/.erl_inetrc
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/blockquote&gt;
@@ -122,7 +122,7 @@ You now have Erlang, RabbitMQ, and Celery installed and running on Webfaction.&l
 &lt;/div&gt;
 &lt;div class="section" id="todo"&gt;
 &lt;h2&gt;Todo&lt;/h2&gt;
-&lt;p&gt;I've heard that daemonizing Erlang + RabbitMQ + Celery with &lt;a class="reference external" href="http://supervisord.org/"&gt;Supervisor&lt;/a&gt; is a good idea.
+&lt;p&gt;I've heard that controlling Erlang + RabbitMQ + Celery with &lt;a class="reference external" href="http://supervisord.org/"&gt;Supervisor&lt;/a&gt; is a good idea.
 Will look into that.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="section" id="references"&gt;
